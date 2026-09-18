@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
+import { existsSync } from 'node:fs';
 
-config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
+config({ path: existsSync('.env') ? '.env' : `.env.${process.env.NODE_ENV || 'development'}` });
 
 export const {
     // Configuration variables from the environment
