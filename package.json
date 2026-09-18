@@ -1,0 +1,48 @@
+{
+    "name": "@thantpyaeshine/express-api",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "Thant Pyae Shine [dev@thantpyaeshine]",
+    "type": "module",
+    "main": "dist/src/index.js",
+    "scripts": {
+        "build": "tsc && node -e \"require('fs').cpSync('src/lib', 'dist/src/lib', { recursive: true })\"",
+        "start": "npm run build && node dist/src/index.js",
+        "dev": "tsx watch src/index.ts",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "better-auth": "^1.7.5",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.6",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "express-validator": "^7.3.2",
+        "morgan": "^1.12.1",
+        "pg": "^8.23.0"
+    },
+    "devDependencies": {
+        "@types/cookie-parser": "^1.4.10",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/jest": "^30.0.0",
+        "@types/morgan": "^1.9.10",
+        "@types/node": "^22.20.3",
+        "jest": "^30.2.0",
+        "nodemon": "^3.1.14",
+        "ts-jest": "^29.4.12",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.23.13",
+        "typescript": "~5.9.3"
+    },
+    "overrides": {
+        "glob": "13.0.6"
+    },
+    "allowScripts": {
+        "@parcel/watcher@2.6.0": true,
+        "esbuild@0.28.2": true,
+        "unrs-resolver@1.12.2": true
+    }
+}

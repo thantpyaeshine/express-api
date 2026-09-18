@@ -1,0 +1,10 @@
+dist/
+node_modules/
+uploads/
+.env*
+!.env.example
+**/.env*
+!**/.env.example
+*.log
+.DS_Store
+better-auth_migrations/

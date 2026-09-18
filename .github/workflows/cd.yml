@@ -1,0 +1,49 @@
+name: CD
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Package production build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Assemble production artifact
+        run: |
+          mkdir artifact
+          cp package.json package-lock.json artifact/
+          cp -R dist/. artifact/dist/
+          npm ci --omit=dev --ignore-scripts --prefix artifact
+
+      - name: Upload production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: express-api-${{ github.sha }}
+          path: artifact
+          if-no-files-found: error
+          retention-days: 14
