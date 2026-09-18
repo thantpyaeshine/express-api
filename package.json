@@ -6,6 +6,9 @@
     "author": "Thant Pyae Shine [dev@thantpyaeshine]",
     "type": "module",
     "main": "dist/src/index.js",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "build": "tsc && node -e \"require('fs').cpSync('src/lib', 'dist/src/lib', { recursive: true })\"",
         "start": "npm run build && node dist/src/index.js",
