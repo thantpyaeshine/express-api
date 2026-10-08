@@ -50,15 +50,17 @@ All routes under `/auth` are handled by Better Auth. Email/password authenticati
 
 ```text
 src/
-  index.ts                 Express application and server entry point
+  app.ts                   Express app setup and route registration
+  index.ts                 HTTP server entry point
   config/env.config.ts     Environment loading and exported settings
   routes/                  Express route registration
-  controllers/             Request handlers and async error handling
-  middlewares/             Reusable request middleware
+  controllers/             Request handlers
+  middlewares/             Reusable middleware and centralized error handling
   validators/              Express Validator helpers
   lib/auth.ts              Better Auth server configuration
   lib/status.html          Health status page
-tests/unit/                Jest unit tests
+scripts/copy-assets.mjs    Copy runtime assets during build
+tests/                     Jest unit and integration tests
 ```
 
 ## Scripts
@@ -90,7 +92,7 @@ npm test
 1. Add or update a controller in `src/controllers`.
 2. Add route registration in `src/routes`.
 3. Put reusable request logic in `src/middlewares` and validation rules in `src/validators`.
-4. Mount new routers from `src/index.ts`.
+4. Mount new routers from `src/app.ts`.
 5. Add focused tests under `tests`.
 
 The project uses native ESM. Local TypeScript imports therefore include the `.js` extension, matching the compiled output expected by Node.js.
