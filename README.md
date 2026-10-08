@@ -21,17 +21,16 @@ The server listens on `http://localhost:3000` by default. The `dev` script uses 
 
 ## Configuration
 
-Configuration is loaded from `.env` when present, otherwise from `.env.<NODE_ENV>`, by `src/config/env.config.ts`. For local development, create `.env.development` in the project root:
+Configuration is loaded from `.env.<NODE_ENV>` by `src/config/env.config.ts`. For local development, create `.env.development` in the project root:
 
 ```env
 PORT=3000
 CLIENT_ORIGINS=["http://localhost:3000"]
 AUTH_DB_URI=postgresql://user:password@localhost:5432/database
 BETTER_AUTH_SECRET=replace-with-a-long-random-secret
-BETTER_AUTH_URL=http://localhost:3000
 ```
 
-`PORT` defaults to `3000`, `CLIENT_ORIGINS` defaults to `["http://localhost:3000"]`, and `BETTER_AUTH_URL` defaults to `http://localhost:<PORT>`. `BETTER_AUTH_SECRET` must be at least 32 characters, and `AUTH_DB_URI` must be set. Invalid configuration stops startup with a field-specific error.
+`PORT` defaults to `3000`, and `CLIENT_ORIGINS` defaults to `["http://localhost:3000"]`. `AUTH_DB_URI` and `BETTER_AUTH_SECRET` should be set before using authentication features.
 
 ## API Routes
 
