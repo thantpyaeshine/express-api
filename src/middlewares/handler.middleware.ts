@@ -6,8 +6,7 @@ const handle: MiddlewareHandler = (middleware, name) =>
             await middleware(req, res, next);
         }
         catch (error) {
-            console.error(`Error in ${middleware.name || name || 'unknown'} middleware:\n`, error);
-            return res.status(500).json({ message: 'Internal server error' });
+            next(error);
         }
     };
 
