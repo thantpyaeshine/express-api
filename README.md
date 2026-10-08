@@ -40,7 +40,11 @@ Returns a JSON object containing the current server timestamp.
 
 ### `GET /system/health`
 
-Serves the status page from `src/lib/status.html`. The route passes through the system protection middleware and the shared controller error handler.
+Serves the status page from `src/lib/status.html`. The page fetches the current liveness status from `/system/live`.
+
+### `GET /system/live`
+
+Returns a JSON liveness status and timestamp. This confirms the API process is responding; it does not check dependency readiness.
 
 ### `/auth/*`
 
