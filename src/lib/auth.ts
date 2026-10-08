@@ -1,9 +1,10 @@
 import { betterAuth } from "better-auth";
-import { BETTER_AUTH_SECRET, PORT, AUTH_DB_URI, CLIENT_ORIGINS } from "../config/env.config.js";
-// pg does not currently provide declarations in this setup.
-// @ts-expect-error: pg is used at runtime and is intentionally untyped here.
+import ENV from "../config/env.config.js";
+// @ts-expect-error `pg` does not provide declarations in this project.
 import { Pool } from "pg";
 import { twoFactor, jwt } from "better-auth/plugins";
+
+const { BETTER_AUTH_SECRET, PORT, AUTH_DB_URI, CLIENT_ORIGINS } = ENV;
 
 export const auth = betterAuth({
     database: new Pool({

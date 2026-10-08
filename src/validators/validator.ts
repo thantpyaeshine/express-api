@@ -1,8 +1,7 @@
-import type { NextFunction, Request, Response } from 'express';
-import type { ValidationChain } from 'express-validator';
+import { ValidationHandler } from '@/types/express';
 
-export const validate = (validations: ValidationChain[]) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+export const validate: ValidationHandler = (validations) =>
+    async (req, res, next) => {
         const errors = [];
 
         for (const validation of validations) {
@@ -18,4 +17,3 @@ export const validate = (validations: ValidationChain[]) => {
 
         next();
     };
-};

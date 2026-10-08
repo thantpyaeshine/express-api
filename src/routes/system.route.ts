@@ -1,7 +1,7 @@
+import handle from '@controller/handler';
+import { getStatus } from '@controller/system';
+import { protectSystem } from '@middleware/system';
 import express from 'express';
-import { getStatus } from '../controllers/system.controller.js';
-import handle from '../controllers/handle.controller.js';
-import { protectSystem } from '../middlewares/system.middleware.js';
 
 const router = express.Router();
 

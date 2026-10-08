@@ -1,7 +1,7 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { fileURLToPath } from 'url';
 
-import { getStatus } from '../../src/controllers/system.controller.js';
+import { getStatus } from '@/controllers/system.controller';
 
 describe('getStatus', () => {
     it('sends the status page', () => {
@@ -10,7 +10,7 @@ describe('getStatus', () => {
             new URL('../../src/lib/status.html', import.meta.url),
         );
 
-        getStatus({} as any, response as any);
+        getStatus({} as any, response as any, jest.fn() as any);
 
         expect(response.sendFile).toHaveBeenCalledWith(expectedStatusPage);
         expect(response.sendFile).toHaveBeenCalledTimes(1);

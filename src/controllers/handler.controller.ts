@@ -1,7 +1,7 @@
-import type { NextFunction, Request, RequestHandler, Response } from 'express';
+import type { ControllerHandler } from '@type/express';
 
-const handle = (controller?: RequestHandler): RequestHandler =>
-    async (req: Request, res: Response, next: NextFunction) => {
+const handle: ControllerHandler = (controller) =>
+    async (req, res, next) => {
         try {
             if (!controller) {
                 return res.status(501).json({ message: 'Service unavailable.' });

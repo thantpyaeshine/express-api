@@ -1,7 +1,8 @@
+import type { Validator } from "@/types/express";
 import { body } from "express-validator";
 import { validate } from "./validator.js";
 
-export const validateSystem = validate([
+export const validateSystem: Validator = validate([
     body('dummyField').notEmpty().withMessage('dummyField is required'),
     body('dummyData').equals('dummyData').withMessage('dummyData must be "dummyData"')
 ]);

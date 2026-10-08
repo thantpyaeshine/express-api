@@ -1,7 +1,7 @@
-import type { RequestHandler, Request, Response, NextFunction } from 'express';
+import type { MiddlewareHandler } from '@type/express';
 
-const handle = (middleware: RequestHandler, name?: string): RequestHandler =>
-    async (req: Request, res: Response, next: NextFunction) => {
+const handle: MiddlewareHandler = (middleware, name) =>
+    async (req, res, next) => {
         try {
             await middleware(req, res, next);
         }

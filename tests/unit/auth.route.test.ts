@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, jest } from '@jest/globals';
 import express from 'express';
 import type { Server } from 'node:http';
 
-jest.unstable_mockModule('../../src/lib/auth.js', () => ({
+jest.unstable_mockModule('@lib/auth', () => ({
     auth: {},
 }));
 
@@ -36,7 +36,7 @@ afterEach(async () => {
 describe('authRoutes', () => {
     it('serves the Better Auth health endpoint through the client', async () => {
         const { createAuthClient } = await import('better-auth/client');
-        const { default: authRoutes } = await import('../../src/routes/auth.route.js');
+        const { default: authRoutes } = await import('@/routes/auth.route');
         const app = express();
         app.use('/auth', authRoutes);
 
