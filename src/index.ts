@@ -25,7 +25,7 @@ try {
 
             void authDatabase.end()
                 .then(() => console.log('Database connections closed'))
-                .catch((error) => {
+                .catch((error: unknown) => {
                     console.error('Failed to close database connections:', error);
                     process.exitCode = 1;
                 });
