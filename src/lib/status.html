@@ -25,7 +25,7 @@
             display: inline-block;
             width: 12px;
             height: 12px;
-            background: #00ff00;
+            background: #888;
             border-radius: 50%;
             margin-right: 8px;
             animation: pulse 2s infinite;
@@ -61,11 +61,24 @@
 <body>
     <div class="status-card">
         <h1><span class="status-indicator"></span>API Status</h1>
-        <div class="metric"><strong>Status:</strong> Operational</div>
+        <div class="metric"><strong>Status:</strong> <span id="status">Checking…</span></div>
         <div class="metric"><strong>Timestamp:</strong> <span id="timestamp"></span></div>
     </div>
     <script type="module">
-        document.getElementById('timestamp').textContent = new Date().toISOString();
+        const status = document.getElementById('status');
+        const indicator = document.querySelector('.status-indicator');
+        const timestamp = document.getElementById('timestamp');
+
+        try {
+            const response = await fetch('/system/live');
+            const health = await response.json();
+            status.textContent = response.ok ? health.status : 'Unavailable';
+            indicator.style.background = response.ok ? '#00aa00' : '#cc0000';
+            timestamp.textContent = health.timestamp ?? '';
+        } catch {
+            status.textContent = 'Unavailable';
+            indicator.style.background = '#cc0000';
+        }
     </script>
 </body>
 
