@@ -10,7 +10,7 @@
         "access": "public"
     },
     "scripts": {
-        "build": "tsc && tsc-alias && node -e \"require('fs').cpSync('src/lib', 'dist/src/lib', { recursive: true })\"",
+        "build": "tsc && tsc-alias && node scripts/copy-assets.mjs",
         "start": "npm run build && node dist/src/index.js",
         "dev": "tsx watch src/index.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
