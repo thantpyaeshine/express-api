@@ -9,8 +9,7 @@ const handle: ControllerHandler = (controller) =>
             await controller(req, res, next);
         }
         catch (error) {
-            console.error(`Error in ${controller?.name || 'unknown'} controller:\n`, error);
-            return res.status(500).json({ message: 'Internal server error' });
+            next(error);
         }
     };
 

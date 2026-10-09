@@ -4,7 +4,7 @@ import ENV from "../config/env.config.js";
 import { Pool } from "pg";
 import { twoFactor, jwt } from "better-auth/plugins";
 
-const { BETTER_AUTH_SECRET, PORT, AUTH_DB_URI, CLIENT_ORIGINS } = ENV;
+const { BETTER_AUTH_SECRET, AUTH_DB_URI, CLIENT_ORIGINS } = ENV;
 
 export const auth = betterAuth({
     database: new Pool({
