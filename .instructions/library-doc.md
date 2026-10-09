@@ -29,9 +29,6 @@ Keep this guide aligned with the dependencies declared in the root `package.json
 | `@types/cookie-parser` | `^1.4.10` | Cookie-parser type definitions. |
 | `@types/cors` | `^2.8.19` | CORS type definitions. |
 | `@types/morgan` | `^1.9.10` | Morgan type definitions. |
-| `@types/jest` | `^30.0.0` | Jest type definitions used by the Jest config. |
-| `nodemon` | `^1.14.10` | Declared directly, but not invoked by the current npm scripts. |
-| `ts-node` | `^10.9.2` | Declared directly, but not invoked by the current npm scripts. |
 
 The build also uses Node's built-in `node:fs` API in `scripts/copy-assets.mjs`; it does not require a separate asset-copy package.
 

@@ -30,13 +30,10 @@
         "@types/cookie-parser": "^1.4.10",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
-        "@types/jest": "^30.0.0",
         "@types/morgan": "^1.9.10",
         "@types/node": "^22.20.3",
         "jest": "^30.2.0",
-        "nodemon": "^1.14.10",
         "ts-jest": "^29.1.2",
-        "ts-node": "^10.9.2",
         "tsc-alias": "^1.9.7",
         "tsx": "^4.23.13",
         "typescript": "~5.9.3"
