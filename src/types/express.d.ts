@@ -18,7 +18,7 @@ export type RequestHandler = (req: Request, res: Response, next: NextFunction) =
 
 export type Middleware = RequestHandler;
 
-export type MiddlewareHandler = (middleware: Middleware, name?: string) => RequestHandler;
+export type MiddlewareHandler = (middleware: Middleware) => RequestHandler;
 
 export type Controller = RequestHandler;
 

@@ -1,52 +1,50 @@
 # Code Standards
 
-## Engineering mindset
+These standards describe how to make changes in this repository. Follow the existing implementation and its configuration when a convention is unclear. Keep this document focused on coding practices; system structure and runtime behavior belong in the architecture guide.
 
-Act as a careful engineer working in an existing API template. Read the relevant source, tests, and configuration before changing code. Make focused, secure changes that preserve unrelated behavior; prefer straightforward, maintainable solutions over unnecessary abstractions or excessive fragmentation. Add or adjust tests for behavior changes and report checks accurately.
+## Principles
 
-## Naming and files
+- Prefer clear, direct code over cleverness or unnecessary abstraction.
+- Make the smallest change that fully addresses the requirement. Preserve unrelated behavior and avoid drive-by cleanup.
+- Read nearby implementation, tests, and configuration before changing an established pattern.
+- Keep each function and module focused. Introduce shared abstractions when they remove meaningful duplication or clarify a stable concept.
+- Remove obsolete code rather than leaving commented-out implementations or unused declarations.
+- Add comments to explain non-obvious reasoning or constraints, not to narrate what the code already says.
 
-- Use lowercase names for files and directories. Prefer one concise descriptive word when it is clear; when a file has a feature and role, use `<feature>.<role>.ts`, as in `system.controller.ts`, `auth.route.ts`, and `error.middleware.ts`.
-- Use `camelCase` for variables and functions, and `PascalCase` for TypeScript types. Follow established role suffixes: `.route.ts`, `.controller.ts`, `.middleware.ts`, and `.validator.ts`.
-- Keep reusable, feature-neutral helpers in a clearly named module such as `validator.ts`; avoid creating folders or files for one-line abstractions without a concrete reuse or organization need.
+## Naming and Formatting
 
-## Architecture and component responsibilities
+- Use lowercase names for files and directories. Use a concise descriptive filename; use a feature-and-role pattern such as `<feature>.<role>.ts` when it matches the surrounding code.
+- Use `camelCase` for variables and functions, and `PascalCase` for types and classes. Use uppercase names for environment variables and established constants.
+- Follow the repository's prevailing style: single quotes, four-space indentation, and trailing commas in multiline structures.
+- Match nearby code when a legacy file differs. Do not reformat unrelated lines as part of a behavior change.
 
-- Put Express app composition and route mounting in `src/app.ts`; keep process/server startup in `src/index.ts`.
-- Put endpoint registration in `src/routes/`. Routes should connect middleware and controllers rather than accumulate business logic.
-- Put request/response behavior in `src/controllers/`; type handlers with the shared types in `src/types/express.d.ts`.
-- Put reusable request processing in `src/middlewares/`. Use the controller and middleware wrappers where appropriate so rejected async work reaches Express's centralized error handler.
-- Put request validation chains in `src/validators/`, and reusable validation execution in `validator.ts`.
-- Keep framework setup and environment loading in `src/config/`; integrations and non-code runtime assets belong in `src/lib/`.
+## TypeScript and Modules
 
-## Imports, types, and formatting
+- Preserve strict type checking. Prefer precise types, `unknown`, or a narrow union over `any`; do not use type assertions to silence an error without establishing why they are safe.
+- Use `import type` for imports used only as types.
+- The project uses native ESM. Include `.js` extensions in relative TypeScript imports when required by the existing module convention; use configured aliases for supported source imports.
+- Keep public interfaces and behavior stable unless the task requires a change. When changing them, update their callers and tests.
 
-- Prefer the configured source aliases (`@route/*`, `@controller/*`, `@middleware/*`, `@config/*`, `@lib/*`, `@type/*`) for source modules.
-- For relative imports in native ESM TypeScript, include the `.js` extension so emitted Node.js imports resolve. The build runs `tsc-alias` to rewrite configured aliases.
-- Use `import type` for type-only dependencies. Preserve strict TypeScript checking; avoid `any` when a shared or narrow type is available.
-- Use single quotes, four-space indentation, and trailing commas in multiline structures, following the predominant style in the source. Match nearby code where legacy formatting differs; avoid unrelated reformatting.
+## Implementation and Error Handling
 
-## Error handling and security
+- Validate untrusted input at the system boundary before relying on its shape or contents.
+- Await asynchronous work and handle failures through the established error flow. Do not silently discard rejected promises or catch errors without recovering, adding useful context, or forwarding them.
+- Return safe, intentional responses to callers. Do not expose stack traces, secrets, credentials, or internal implementation details.
+- Keep logs useful for diagnosis while excluding sensitive values and unnecessary personal data.
+- Avoid hidden side effects. Make state changes, I/O, and retry behavior clear to the reader.
 
-- Forward errors from wrapped controllers/middleware with `next(error)`; do not return internal exception details to clients. The centralized error middleware logs details and sends a generic response.
-- Keep middleware and route ordering intentional. The error handler belongs after route registration; when headers are already sent, delegate the error to Express.
-- Do not commit secrets, credentials, or real environment files. Use `.env.example` for placeholder configuration. Validate untrusted request data before using it, and avoid logging sensitive values.
-- Review dependency changes for necessity and advisories; keep `package.json` and `package-lock.json` consistent.
+## Security and Dependencies
 
-## Tests and build
+- Never commit credentials, secret values, or real local environment files. Use placeholders in examples and keep secrets in the appropriate runtime configuration.
+- Treat external input and external responses as untrusted. Use parameterized APIs for data access rather than constructing executable queries from strings.
+- Add a dependency only when it provides a needed capability that existing code or the platform does not reasonably provide. Consider maintenance, compatibility, and security before adding it.
+- Use npm to change dependencies and keep `package.json` and `package-lock.json` synchronized.
 
-- Add unit tests under `tests/unit/` for focused functions/handlers and integration tests under `tests/integration/` for composed HTTP behavior.
-- Use Jest, `@jest/globals`, and the existing ESM/Jest alias configuration. Mock external services such as Better Auth when the test is not intended to require a real database.
-- Example integration assertions:
+## Tests and Verification
 
-  ```ts
-  const response = await fetch(`${baseUrl}/system/health`);
-
-  expect(response.status).toBe(200);
-  expect(response.headers.get('content-type')).toContain('text/html');
-  ```
-
-- Run the existing project checks after code changes:
+- Add or update tests when behavior changes. Prefer focused unit tests for isolated logic and integration tests when behavior depends on application wiring or external boundaries.
+- Keep tests deterministic. Mock external dependencies when a test is not intended to exercise them; test real integration behavior explicitly when that is the purpose of the test.
+- Run the applicable repository checks after code changes:
 
   ```bash
   npm run typecheck
@@ -54,4 +52,14 @@ Act as a careful engineer working in an existing API template. Read the relevant
   npm run build
   ```
 
-- The build compiles TypeScript, rewrites aliases, and copies `src/lib` into `dist/src/lib`. Keep runtime assets available in the compiled package.
+- Report which checks passed and disclose any that could not be run. Do not claim that a check passed unless it was run successfully.
+
+## Change Review
+
+Before handing off a change, confirm that:
+
+- It solves the requested problem without unrelated changes.
+- Error paths, boundary conditions, and security implications have been considered.
+- Tests cover meaningful behavior changes and the relevant checks have been run.
+- Documentation and dependency metadata are updated when the change makes them inaccurate.
+- The diff contains no secrets, generated artifacts, debug output, or unexplained temporary code.

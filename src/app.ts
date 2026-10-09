@@ -9,6 +9,7 @@ app.get('/', ({ res }: { res: any }) =>
 
 app.use('/system', systemRoutes);
 app.use('/auth', authRoutes);
+    
 app.use(errorHandler);
-
+    
 export default app;

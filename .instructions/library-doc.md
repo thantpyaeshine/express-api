@@ -39,6 +39,7 @@ The build also uses Node's built-in `node:fs` API in `scripts/copy-assets.mjs`; 
 
 - Add runtime libraries to `dependencies` and development/build/test tools to `devDependencies`.
 - Use npm to add, remove, or update packages so `package-lock.json` remains synchronized. Commit both manifest and lockfile changes.
+- Before changing how a library is used, search related project documentation and the library's official documentation to understand its role, conventions, and constraints. If a relevant library-specific skill is available, read and follow it.
 - Before introducing a dependency, check whether Node.js or an existing package already provides the needed capability. Review advisories and compatibility with the project's Node.js 22+ and ESM setup.
 - When adding or removing a direct dependency, update this guide with its role and usage location. Mention unused direct dependencies rather than assuming they are needed; remove them only after checking the repository and tooling.
 - Prefer the package's official documentation for detailed APIs and configuration options.
