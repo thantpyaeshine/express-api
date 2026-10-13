@@ -21,7 +21,9 @@ The server listens on port `3000` by default. Set `PORT` to override it. The `de
 
 ## Configuration
 
-Configuration is loaded from `.env` when that file exists; otherwise, `src/config/env.config.ts` loads `.env.<NODE_ENV>` (using `development` when `NODE_ENV` is unset). For local development, create `.env.development` in the project root:
+At startup, `src/config/env.config.ts` selects the first existing environment file from the working directory. The selection uses the `NODE_ENV` value already present in the process before dotenv loads: `prod`/`production` checks `.env.prod`, then `.env.production`; `dev`/`development`/`local` checks `.env.dev`, then `.env.development`, then `.env.local`; and `test` checks `.env.test`. Each sequence then falls back to `.env`. If `NODE_ENV` is unset or unrecognized, only `.env` is checked. Set `NODE_ENV=development` in the process environment to select `.env.development`; setting it only inside that file does not affect which file is selected. Existing process environment variables take precedence over values loaded from the selected file.
+
+For local development, create `.env` in the project root, or set `NODE_ENV=development` before starting the app and create `.env.development`:
 
 ```env
 PORT=3000
@@ -33,8 +35,7 @@ BETTER_AUTH_SECRET=replace-with-a-long-random-secret
 | Variable | Required | Default / validation | Purpose |
 | --- | --- | --- | --- |
 | `NODE_ENV` | No | `development`; allowed values are `development`, `production`, and `test` | Selects the runtime mode and, when `.env` is absent, the environment file to load. |
-| `PORT` | No | `3000`; integer from `1` to `65535` | HTTP server port. |
-| `BETTER_AUTH_URL` | No | `http://localhost:<PORT>` (uses `3000` if `PORT` is unset); must be a URL | Public base URL for Better Auth. |
+| `PORT` | No | `3000`; coerced to an integer | HTTP server port. |
 | `BETTER_AUTH_SECRET` | Yes | Must be a non-empty string | Secret used by Better Auth. |
 | `AUTH_DB_URI` | Yes | Must be a non-empty string | PostgreSQL connection string used by authentication. |
 | `CLIENT_ORIGINS` | No | `http://localhost:3000`; each parsed entry must be a URL | Allowed CORS origins. Use a comma-separated list, for example `http://localhost:5173,https://app.example.com`. Square brackets around the list are also accepted. |
