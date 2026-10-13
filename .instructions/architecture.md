@@ -44,7 +44,7 @@ flowchart LR
 | `src/middlewares/` | Implements reusable request processing, handler wrappers, and centralized error handling. |
 | `src/validators/` | Defines reusable `express-validator` chains and validation middleware. |
 | `src/lib/` | Configures integrations such as Better Auth and contains runtime assets such as `status.html`. |
-| `src/types/` | Declares shared Express and environment types. |
+| `src/types/` | Declares shared Express types. Environment types are inferred from the Zod schema. |
 | `tests/unit/` | Tests individual controllers, middleware, and handlers. |
 | `tests/integration/` | Tests the composed Express app over HTTP. |
 
@@ -58,8 +58,10 @@ flowchart LR
 
 ## Configuration and Build
 
-- `src/config/env.config.ts` loads `.env` when present; otherwise it loads `.env.<NODE_ENV>`, defaulting to `.env.development` when `NODE_ENV` is unset.
-- `src/types/env.d.ts` describes environment values for TypeScript. This type declaration does not parse or validate runtime values.
+- `src/config/env.config.ts` loads `.env` from the working directory when present; otherwise it loads `.env.<NODE_ENV>`, defaulting to `.env.development` when `NODE_ENV` is unset. `NODE_ENV` is validated before it is used to construct a file path, file-read errors are surfaced, and Zod validates the complete runtime environment before export. Existing process environment variables take precedence over values from the selected file.
+- `NODE_ENV` is limited to `development`, `production`, or `test` and defaults to `development`; `PORT` is an integer from 1 through 65535 and defaults to `3000`.
+- `BETTER_AUTH_SECRET` and `AUTH_DB_URI` are required non-empty strings. `BETTER_AUTH_URL` defaults to `http://localhost:<PORT>` (or port `3000` when `PORT` is unset).
+- `CLIENT_ORIGINS` defaults to `http://localhost:3000`; the configuration accepts a comma-separated list (optionally enclosed in square brackets), trims each entry, and validates each as a URL before passing the resulting array to CORS.
 - `tsconfig.json` enables strict checking, targets ES2024, emits ESM to `dist/`, and defines aliases such as `@route/*` and `@middleware/*`.
 - `package.json` declares `"type": "module"`. `npm run build` compiles with `tsc`, rewrites aliases with `tsc-alias`, then copies runtime assets.
 - `npm run dev` runs `tsx watch src/index.ts`. `npm start` builds the project and starts `dist/src/index.js`.

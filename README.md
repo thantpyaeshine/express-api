@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-Set `PORT=3000` in the environment file to listen on `http://localhost:3000`. The `dev` script uses `tsx watch`, so TypeScript changes restart the server automatically.
+The server listens on port `3000` by default. Set `PORT` to override it. The `dev` script uses `tsx watch`, so TypeScript changes restart the server automatically.
 
 ## Configuration
 
@@ -30,7 +30,16 @@ AUTH_DB_URI=postgresql://user:password@localhost:5432/database
 BETTER_AUTH_SECRET=replace-with-a-long-random-secret
 ```
 
-Set `PORT`, `CLIENT_ORIGINS`, `AUTH_DB_URI`, and `BETTER_AUTH_SECRET` in the selected environment file. `CLIENT_ORIGINS` is passed directly to the CORS middleware as a single origin string; the application does not parse a JSON array. `AUTH_DB_URI` and `BETTER_AUTH_SECRET` are required for authentication. Do not commit real credentials or secrets.
+| Variable | Required | Default / validation | Purpose |
+| --- | --- | --- | --- |
+| `NODE_ENV` | No | `development`; allowed values are `development`, `production`, and `test` | Selects the runtime mode and, when `.env` is absent, the environment file to load. |
+| `PORT` | No | `3000`; integer from `1` to `65535` | HTTP server port. |
+| `BETTER_AUTH_URL` | No | `http://localhost:<PORT>` (uses `3000` if `PORT` is unset); must be a URL | Public base URL for Better Auth. |
+| `BETTER_AUTH_SECRET` | Yes | Must be a non-empty string | Secret used by Better Auth. |
+| `AUTH_DB_URI` | Yes | Must be a non-empty string | PostgreSQL connection string used by authentication. |
+| `CLIENT_ORIGINS` | No | `http://localhost:3000`; each parsed entry must be a URL | Allowed CORS origins. Use a comma-separated list, for example `http://localhost:5173,https://app.example.com`. Square brackets around the list are also accepted. |
+
+The environment is parsed and validated at startup. `CLIENT_ORIGINS` is transformed into an array of origins before it is passed to the credentialed CORS middleware. Do not commit real credentials or secrets.
 
 ## API Routes
 
@@ -61,7 +70,7 @@ src/
   controllers/             Request handlers
   middlewares/             Reusable middleware and centralized error handling
   validators/              Reusable express-validator chains and middleware
-  types/                   Environment and Express type declarations
+  types/                   Shared Express type declarations
   lib/                     Better Auth configuration and health page asset
 scripts/copy-assets.mjs    Copy runtime assets during build
 tests/                     Jest unit and integration tests

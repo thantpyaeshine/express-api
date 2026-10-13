@@ -2,6 +2,9 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import express from 'express';
 import type { Server } from 'node:http';
 
+process.env.BETTER_AUTH_SECRET ??= 'integration-test-secret';
+process.env.AUTH_DB_URI ??= 'postgres://test:test@localhost:5432/test';
+
 jest.unstable_mockModule('@lib/auth', () => ({
     auth: {},
 }));
