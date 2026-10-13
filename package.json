@@ -10,9 +10,9 @@
         "access": "public"
     },
     "scripts": {
-        "build": "tsc && tsc-alias && node scripts/copy-assets.mjs",
-        "start": "npm run build && node dist/src/index.js",
-        "dev": "tsx watch src/index.ts",
+        "build": "tsc && tsc-alias",
+        "start": "cross-env NODE_ENV=production npm run build && node dist/src/index.js",
+        "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "typecheck": "tsc --noEmit"
     },
@@ -24,7 +24,8 @@
         "express": "^5.2.1",
         "express-validator": "^7.3.2",
         "morgan": "^1.12.1",
-        "pg": "^8.23.0"
+        "pg": "^8.23.0",
+        "zod": "^4.6.5"
     },
     "devDependencies": {
         "@types/cookie-parser": "^1.4.10",
@@ -32,6 +33,7 @@
         "@types/express": "^5.0.6",
         "@types/morgan": "^1.9.10",
         "@types/node": "^22.20.3",
+        "cross-env": "^10.1.0",
         "jest": "^30.2.0",
         "ts-jest": "^29.1.2",
         "tsc-alias": "^1.9.7",

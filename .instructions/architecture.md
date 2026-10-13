@@ -44,7 +44,7 @@ flowchart LR
 | `src/middlewares/` | Implements reusable request processing, handler wrappers, and centralized error handling. |
 | `src/validators/` | Defines reusable `express-validator` chains and validation middleware. |
 | `src/lib/` | Configures integrations such as Better Auth and contains runtime assets such as `status.html`. |
-| `src/types/` | Declares shared Express and environment types. |
+| `src/types/` | Declares shared Express types. Environment types are inferred from the Zod schema. |
 | `tests/unit/` | Tests individual controllers, middleware, and handlers. |
 | `tests/integration/` | Tests the composed Express app over HTTP. |
 
@@ -58,8 +58,10 @@ flowchart LR
 
 ## Configuration and Build
 
-- `src/config/env.config.ts` loads `.env` when present; otherwise it loads `.env.<NODE_ENV>`, defaulting to `.env.development` when `NODE_ENV` is unset.
-- `src/types/env.d.ts` describes environment values for TypeScript. This type declaration does not parse or validate runtime values.
+- `src/config/env.config.ts` selects the first existing environment file from the working directory, based on the `NODE_ENV` value already present in the process before dotenv loads it. Production aliases (`prod`, `production`) check `.env.prod` then `.env.production`; development aliases (`dev`, `development`, `local`) check `.env.dev`, `.env.development`, then `.env.local`; `test` checks `.env.test`. Each list then checks `.env`. If `NODE_ENV` is unset or unrecognized, only `.env` is checked; a `NODE_ENV` value inside an environment file cannot affect file selection. Existing process environment variables take precedence over values from the selected file, and Zod validates the complete runtime environment before export.
+- `NODE_ENV` is limited to `development`, `production`, or `test` and defaults to `development`; `PORT` is coerced to an integer and defaults to `3000` (the schema does not impose a port range).
+- `BETTER_AUTH_SECRET` and `AUTH_DB_URI` are required non-empty strings.
+- `CLIENT_ORIGINS` defaults to `http://localhost:3000`; the configuration accepts a comma-separated list (optionally enclosed in square brackets), trims each entry, and validates each as a URL before passing the resulting array to CORS.
 - `tsconfig.json` enables strict checking, targets ES2024, emits ESM to `dist/`, and defines aliases such as `@route/*` and `@middleware/*`.
 - `package.json` declares `"type": "module"`. `npm run build` compiles with `tsc`, rewrites aliases with `tsc-alias`, then copies runtime assets.
 - `npm run dev` runs `tsx watch src/index.ts`. `npm start` builds the project and starts `dist/src/index.js`.

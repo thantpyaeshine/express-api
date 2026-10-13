@@ -17,11 +17,13 @@ npm install
 npm run dev
 ```
 
-Set `PORT=3000` in the environment file to listen on `http://localhost:3000`. The `dev` script uses `tsx watch`, so TypeScript changes restart the server automatically.
+The server listens on port `3000` by default. Set `PORT` to override it. The `dev` script uses `tsx watch`, so TypeScript changes restart the server automatically.
 
 ## Configuration
 
-Configuration is loaded from `.env` when that file exists; otherwise, `src/config/env.config.ts` loads `.env.<NODE_ENV>` (using `development` when `NODE_ENV` is unset). For local development, create `.env.development` in the project root:
+At startup, `src/config/env.config.ts` selects the first existing environment file from the working directory. The selection uses the `NODE_ENV` value already present in the process before dotenv loads: `prod`/`production` checks `.env.prod`, then `.env.production`; `dev`/`development`/`local` checks `.env.dev`, then `.env.development`, then `.env.local`; and `test` checks `.env.test`. Each sequence then falls back to `.env`. If `NODE_ENV` is unset or unrecognized, only `.env` is checked. Set `NODE_ENV=development` in the process environment to select `.env.development`; setting it only inside that file does not affect which file is selected. Existing process environment variables take precedence over values loaded from the selected file.
+
+For local development, create `.env` in the project root, or set `NODE_ENV=development` before starting the app and create `.env.development`:
 
 ```env
 PORT=3000
@@ -30,7 +32,15 @@ AUTH_DB_URI=postgresql://user:password@localhost:5432/database
 BETTER_AUTH_SECRET=replace-with-a-long-random-secret
 ```
 
-Set `PORT`, `CLIENT_ORIGINS`, `AUTH_DB_URI`, and `BETTER_AUTH_SECRET` in the selected environment file. `CLIENT_ORIGINS` is passed directly to the CORS middleware as a single origin string; the application does not parse a JSON array. `AUTH_DB_URI` and `BETTER_AUTH_SECRET` are required for authentication. Do not commit real credentials or secrets.
+| Variable | Required | Default / validation | Purpose |
+| --- | --- | --- | --- |
+| `NODE_ENV` | No | `development`; allowed values are `development`, `production`, and `test` | Selects the runtime mode and, when `.env` is absent, the environment file to load. |
+| `PORT` | No | `3000`; coerced to an integer | HTTP server port. |
+| `BETTER_AUTH_SECRET` | Yes | Must be a non-empty string | Secret used by Better Auth. |
+| `AUTH_DB_URI` | Yes | Must be a non-empty string | PostgreSQL connection string used by authentication. |
+| `CLIENT_ORIGINS` | No | `http://localhost:3000`; each parsed entry must be a URL | Allowed CORS origins. Use a comma-separated list, for example `http://localhost:5173,https://app.example.com`. Square brackets around the list are also accepted. |
+
+The environment is parsed and validated at startup. `CLIENT_ORIGINS` is transformed into an array of origins before it is passed to the credentialed CORS middleware. Do not commit real credentials or secrets.
 
 ## API Routes
 
@@ -61,7 +71,7 @@ src/
   controllers/             Request handlers
   middlewares/             Reusable middleware and centralized error handling
   validators/              Reusable express-validator chains and middleware
-  types/                   Environment and Express type declarations
+  types/                   Shared Express type declarations
   lib/                     Better Auth configuration and health page asset
 scripts/copy-assets.mjs    Copy runtime assets during build
 tests/                     Jest unit and integration tests
