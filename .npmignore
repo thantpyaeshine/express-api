@@ -10,3 +10,5 @@ uploads/
 better-auth_migrations/
 .samples/
 .git/
+.github/workflows/
+!.gitignore
