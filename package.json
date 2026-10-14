@@ -1,6 +1,6 @@
 {
     "name": "@thantpyaeshine/express-api",
-    "version": "1.2.1",
+    "version": "1.2.0",
     "description": "",
     "license": "ISC",
     "author": "Thant Pyae Shine [dev@thantpyaeshine]",
@@ -10,8 +10,8 @@
         "access": "public"
     },
     "scripts": {
-        "build": "tsc && tsc-alias",
-        "start": "cross-env NODE_ENV=production npm run build && node dist/src/index.js",
+        "build": "tsc && tsc-alias --resolve-full-paths",
+        "start": "npm run build && cross-env NODE_ENV=production node dist/src/index.js",
         "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "typecheck": "tsc --noEmit"
@@ -45,7 +45,7 @@
     },
     "allowScripts": {
         "@parcel/watcher@2.6.0": true,
-        "esbuild@0.28.2": true,
-        "unrs-resolver@1.12.2": true
+        "unrs-resolver@1.12.2": true,
+        "esbuild": true
     }
 }
