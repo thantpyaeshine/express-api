@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import handleController from '@/controllers/handler.controller';
 import handleMiddleware from '@/middlewares/handler.middleware';
@@ -7,7 +7,7 @@ import errorHandler from '@/middlewares/error.middleware';
 describe('error forwarding', () => {
     it('forwards controller errors to Express', async () => {
         const error = new Error('controller failed');
-        const next = jest.fn();
+        const next = vi.fn();
         const handler = handleController(async () => {
             throw error;
         });
@@ -19,7 +19,7 @@ describe('error forwarding', () => {
 
     it('forwards middleware errors to Express', async () => {
         const error = new Error('middleware failed');
-        const next = jest.fn();
+        const next = vi.fn();
         const handler = handleMiddleware(async () => {
             throw error;
         });
@@ -32,18 +32,18 @@ describe('error forwarding', () => {
 
 describe('errorHandler', () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it('logs the error and returns a generic response', () => {
         const error = new Error('internal detail');
         const response = {
             headersSent: false,
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
+            status: vi.fn().mockReturnThis(),
+            json: vi.fn(),
         };
-        const next = jest.fn();
-        jest.spyOn(console, 'error').mockImplementation(() => {});
+        const next = vi.fn();
+        vi.spyOn(console, 'error').mockImplementation(() => {});
 
         errorHandler(error, {} as any, response as any, next);
 
@@ -57,7 +57,7 @@ describe('errorHandler', () => {
 
     it('delegates errors when response headers were already sent', () => {
         const error = new Error('stream failed');
-        const next = jest.fn();
+        const next = vi.fn();
         const response = { headersSent: true };
 
         errorHandler(error, {} as any, response as any, next);

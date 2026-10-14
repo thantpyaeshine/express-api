@@ -22,15 +22,12 @@ Keep this guide aligned with the dependencies declared in the root `package.json
 | `typescript` | `~5.9.3` | Strict type checking and ESM compilation configured in `tsconfig.json`. |
 | `tsx` | `^4.23.13` | Runs and watches `src/index.ts` for `npm run dev`. |
 | `tsc-alias` | `^1.9.7` | Rewrites TypeScript path aliases in compiled output during `npm run build`. |
-| `jest` | `^30.2.0` | Test runner invoked by the `test` script. |
-| `ts-jest` | `^29.1.2` | Transforms TypeScript tests with the ESM preset in `jest.config.ts`. |
+| `vitest` | `^5.0.4` | Test runner invoked by the `test` script; uses Vite's native TypeScript path alias support. |
 | `@types/node` | `^22.20.3` | Node.js API and process types. |
 | `@types/express` | `^5.0.6` | Express type definitions. |
 | `@types/cookie-parser` | `^1.4.10` | Cookie-parser type definitions. |
 | `@types/cors` | `^2.8.19` | CORS type definitions. |
 | `@types/morgan` | `^1.9.10` | Morgan type definitions. |
-
-The build also uses Node's built-in `node:fs` API in `scripts/copy-assets.mjs`; it does not require a separate asset-copy package.
 
 ## Dependency maintenance
 

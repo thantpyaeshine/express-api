@@ -1,15 +1,15 @@
-import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import express from 'express';
 import type { Server } from 'node:http';
 
 process.env.BETTER_AUTH_SECRET ??= 'integration-test-secret';
 process.env.AUTH_DB_URI ??= 'postgres://test:test@localhost:5432/test';
 
-jest.unstable_mockModule('@lib/auth', () => ({
+vi.mock('@lib/auth', () => ({
     auth: {},
 }));
 
-jest.unstable_mockModule('better-auth/node', () => ({
+vi.mock('better-auth/node', () => ({
     toNodeHandler: () => async (
         request: express.Request,
         response: express.Response,
@@ -70,7 +70,7 @@ describe('Express app integration', () => {
     });
 
     it('routes errors from the auth handler through centralized handling', async () => {
-        const log = jest.spyOn(console, 'error').mockImplementation(() => {});
+        const log = vi.spyOn(console, 'error').mockImplementation(() => {});
         const response = await fetch(`${baseUrl}/auth/error`);
 
         expect(response.status).toBe(500);

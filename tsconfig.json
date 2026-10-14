@@ -39,7 +39,7 @@
             "@type/*": [
                 "./src/types/*.d.ts"
             ]
-        },
+        }
     },
     "exclude": [
         "dist",

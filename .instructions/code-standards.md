@@ -48,7 +48,7 @@ These standards describe how to make changes in this repository. Follow the exis
 
   ```bash
   npm run typecheck
-  npm test -- --runInBand
+  npm test
   npm run build
   ```
 

@@ -13,8 +13,8 @@
         "build": "tsc && tsc-alias --resolve-full-paths",
         "start": "npm run build && cross-env NODE_ENV=production node dist/src/index.js",
         "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-        "typecheck": "tsc --noEmit"
+        "test": "vitest run",
+        "typecheck": "tsc --noEmit && tsc --noEmit -p tests/tsconfig.json"
     },
     "dependencies": {
         "better-auth": "^1.7.5",
@@ -34,14 +34,10 @@
         "@types/morgan": "^1.9.10",
         "@types/node": "^22.20.3",
         "cross-env": "^10.1.0",
-        "jest": "^30.2.0",
-        "ts-jest": "^29.1.2",
         "tsc-alias": "^1.9.7",
         "tsx": "^4.23.13",
-        "typescript": "~5.9.3"
-    },
-    "overrides": {
-        "glob": "13.0.6"
+        "typescript": "~5.9.3",
+        "vitest": "^5.0.4"
     },
     "allowScripts": {
         "@parcel/watcher@2.6.0": true,

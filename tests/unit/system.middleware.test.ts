@@ -1,10 +1,10 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it, vi } from 'vitest';
 
 import { protectSystem } from '@/middlewares/system.middleware';
 
 describe('protectSystem', () => {
     it('passes the request to the next middleware', async () => {
-        const next = jest.fn();
+        const next = vi.fn();
 
         await protectSystem({} as any, {} as any, next);
 

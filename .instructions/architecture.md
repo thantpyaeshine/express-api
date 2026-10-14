@@ -14,7 +14,7 @@ This repository is an HTTP API. It composes an Express application with authenti
 | Authentication and persistence | Better Auth, PostgreSQL via `pg` | Authentication endpoints and their database connection. |
 | Request middleware | `cors`, `morgan`, `cookie-parser`, `express-validator` | Cross-origin configuration, request logging, cookie parsing, and validation support. |
 | Development and build | `tsx`, TypeScript, `tsc-alias` | Watch-mode development, compilation, and compiled alias rewriting. |
-| Tests | Jest 30, `ts-jest` | TypeScript unit and integration tests in Node.js. |
+| Tests | Vitest | TypeScript unit and integration tests in Node.js. |
 
 ## System Overview
 
@@ -63,11 +63,11 @@ flowchart LR
 - `BETTER_AUTH_SECRET` and `AUTH_DB_URI` are required non-empty strings.
 - `CLIENT_ORIGINS` defaults to `http://localhost:3000`; the configuration accepts a comma-separated list (optionally enclosed in square brackets), trims each entry, and validates each as a URL before passing the resulting array to CORS.
 - `tsconfig.json` enables strict checking, targets ES2024, emits ESM to `dist/`, and defines aliases such as `@route/*` and `@middleware/*`.
-- `package.json` declares `"type": "module"`. `npm run build` compiles with `tsc`, rewrites aliases with `tsc-alias`, then copies runtime assets.
+- `package.json` declares `"type": "module"`. `npm run build` compiles with `tsc` and rewrites aliases with `tsc-alias --resolve-full-paths`.
 - `npm run dev` runs `tsx watch src/index.ts`. `npm start` builds the project and starts `dist/src/index.js`.
 
 ## Tests and Delivery
 
-- Jest runs TypeScript tests in the Node environment using the ESM `ts-jest` preset. `jest.config.ts` maps source aliases for tests.
-- CI runs on pushes and pull requests. It installs dependencies with `npm ci`, then runs `npm run typecheck`, `npm test -- --runInBand`, and `npm run build` on Node.js 22.
+- Vitest runs `tests/**/*.test.ts` in the Node environment and resolves source aliases from `tsconfig.json`. `npm run typecheck` checks both application and test TypeScript projects.
+- CI runs on pushes and pull requests. It installs dependencies with `npm ci`, then runs `npm run typecheck`, `npm test`, and `npm run build` on Node.js 22.
 - CD runs on pushes to any branch or manual dispatch. It packages the compiled app and production dependencies as a GitHub Actions artifact retained for 14 days. This workflow does not deploy to a hosting provider.

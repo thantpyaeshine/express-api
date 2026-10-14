@@ -1,17 +1,17 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import express from 'express';
 import type { Server } from 'node:http';
 
-jest.unstable_mockModule('@lib/auth', () => ({
+vi.mock('@lib/auth', () => ({
     auth: {},
 }));
 
-jest.unstable_mockModule('better-auth/node', () => ({
+vi.mock('better-auth/node', () => ({
     toNodeHandler: () => (_request: unknown, response: express.Response) =>
         response.json({ ok: true }),
 }));
 
-jest.unstable_mockModule('better-auth/client', () => ({
+vi.mock('better-auth/client', () => ({
     createAuthClient: ({ baseURL, basePath }: { baseURL: string; basePath: string }) => ({
         $fetch: async (path: string) => {
             const response = await fetch(`${baseURL}${basePath}${path}`);

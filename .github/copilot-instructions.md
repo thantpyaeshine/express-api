@@ -29,7 +29,7 @@ Run the applicable project checks after code changes:
 
 ```bash
 npm run typecheck
-npm test -- --runInBand
+npm test
 npm run build
 ```
 

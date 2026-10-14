@@ -73,23 +73,22 @@ src/
   validators/              Reusable express-validator chains and middleware
   types/                   Shared Express type declarations
   lib/                     Better Auth configuration and health page asset
-scripts/copy-assets.mjs    Copy runtime assets during build
-tests/                     Jest unit and integration tests
+tests/                     Vitest unit and integration tests
 ```
 
 ## Scripts
 
 ```bash
 npm run dev        # Start the watch-mode development server
-npm run build      # Compile TypeScript and copy runtime library files
+npm run build      # Compile TypeScript and rewrite configured path aliases
 npm start          # Build and run the compiled application
-npm test           # Run Jest tests
-npm run typecheck  # Check types without emitting files
+npm test           # Run Vitest tests
+npm run typecheck  # Check application and test types without emitting files
 ```
 
 ## GitHub Actions
 
-- **CI** runs on pull requests and pushes to `main`. It installs dependencies with `npm ci`, then runs typechecking, unit tests, and the production build.
+- **CI** runs on pull requests and pushes to any branch. It installs dependencies with `npm ci`, then runs typechecking, unit tests, and the production build.
 - **CD** runs on pushes to any branch or manually from the Actions tab. It packages the compiled application with production dependencies and publishes it as a 14-day GitHub Actions artifact named after the commit SHA.
 
 The CD workflow creates a deployable package but does not deploy to a cloud provider. Add a deployment step for the hosting platform and configure its credentials as GitHub Actions secrets when a deployment target is selected.
